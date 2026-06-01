@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<style>
+	body {
+		background-color: black;
+		color: white;
+		display: flex;
+		font-family: sans-serif;
+		justify-content: center;
+	}
+	.app {
+		flex-direction: column;
+	    position: relative;
+	    max-width: 1000px;
+	    justify-content: center;
+	    align-items: center;
+	}
+	.top {
+		width: 100%;
+		text-align: center;
+	}
+	.game {
+		font-size: 28px;
+		justify-content: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 15px; 
+	}
+	.table {
+	    display: block;
+	    flex: 1 1;
+	    font-weight: 700;
+	}
+	.cell {
+		text-transform: uppercase;
+		height: 40px;
+		max-width: 40px;
+		width: 100vw;
+		border: 2px solid white;
+		text-align: center;
+		align-items: center;
+	}
+	.key {
+		align-items: center;
+	    background-color: white;
+	    border: none;
+	    cursor: pointer;
+	    display: flex;
+	    flex: 1 1;
+	    font-family: inherit;
+	    font-size: 20px;
+	    justify-content: center;
+	    margin: 2px;
+	    min-height: 40px;
+	    padding: 2px;
+	    text-decoration: inherit;
+	    color: black;
+	}
+	.keyboard-row {
+		width: 100%;
+		align-items: center;
+		justify-content: stretch;
+		flex-direction: row;
+		display: flex;
+	}
+	#keyboard {
+		width: 100%;
+		align-items: center;
+		justify-content: flex;
+		flex-direction: column;
+		display: flex;
+	}
+	.out {
+		text-transform: capitalize;
+	}
+	#text {
+		font-size: 50%;
+	}
+	#options {
+		font-size: 50%;
+	}
+</style>
+
+<html>
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>musi pi nimi suli</title>
+	</head>
+	<body>
+		<div class="app">
+			<div class="top">
+				<h1>musi pi nimi suli</h1>
+			</div>
+			<div class="game">
+				<div id="options">
+					<label for="suli">suli li</label>
+					<input type="range" min="1" max="15" value="4" id="suli" name="suli">
+					<label for="nimi">kulupu nimi li</label>
+					<select name="nimi" id="nimi">
+						<option value="pu">nimi pu</option>
+						<option value="ku suli">nimi ku suli</option>
+						<option value="ku lili">nimi ku lili</option>
+					 	<option value="ale" disabled>nimi ale lon ilo Linku</option>
+					</select>
+				</div>
+				<div id="table"></div>
+				<div id="text">o sitelen!</div>
+				<div id="keyboard">
+					<div class="keyboard-row">
+						<button class="key out w">w</button>
+						<button class="key out e">e</button>
+						<button class="key out t">t</button>
+						<button class="key out u">u</button>
+						<button class="key out i">i</button>
+						<button class="key out o">o</button>
+						<button class="key out p">p</button>
+					</div>
+					<div class="keyboard-row">
+						<button class="key out a">a</button>
+						<button class="key out s">s</button>
+						<button class="key out n">n</button>
+						<button class="key out m">m</button>
+						<button class="key out j">j</button>
+						<button class="key out k">k</button>
+						<button class="key out l">l</button>
+					</div>
+					<div class="keyboard-row">
+						<button class="key" id="weka">o weka</button>
+						<button class="key" id="pana">o pana</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script>
+	const NIMI_PU = ["a", "akesi", "ala", "alasa", "ale", "anpa", "ante", "anu", "awen", "e", "en", "esun", "ijo", "ike", "ilo", "insa", "jaki", "jan", "jelo", "jo", "kala", "kalama", "kama", "kasi", "ken", "kepeken", "kili", "kiwen", "ko", "kon", "kule", "kulupu", "kute", "la", "lape", "laso", "lawa", "len", "lete", "li", "lili", "linja", "lipu", "loje", "lon", "luka", "lukin", "lupa", "ma", "mama", "mani", "meli", "mi", "mije", "moku", "moli", "monsi", "mu", "mun", "musi", "mute", "nanpa", "nasa", "nasin", "nena", "ni", "nimi", "noka", "o", "olin", "ona", "open", "pakala", "pali", "palisa", "pan", "pana", "pi", "pilin", "pimeja", "pini", "pipi", "poka", "poki", "pona", "pu", "sama", "seli", "selo", "seme", "sewi", "sijelo", "sike", "sin", "sina", "sinpin", "sitelen", "sona", "soweli", "suli", "suno", "supa", "suwi", "tan", "taso", "tawa", "telo", "tenpo", "toki", "tomo", "tu", "unpa", "uta", "utala", "walo", "wan", "waso", "wawa", "weka", "wile"]
+	const NIMI_KU_SULI = ["epiku", "jasima", "kijetesantakalu", "kipisi", "kokosila", "kin", "ku", "lanpan", "leko", "meso", "misikeke", "monsuta", "n", "namako", "oko", "soko", "tonsi", "ali"]
+	const NIMI_KU_LILI = ["apeja", "ete", "ewe", "isipin", "kamalawala", "kan", "kapesi", "ke", "kese", "kiki", "kulijo", "kuntu", "likujo", "linluwi", "loka", "majuna", "misa", "mulapisu", "nalanja", "neja", "oke", "pake", "pata", "peto", "po", "polinpin", "pomotolo", "powe", "samu", "san", "soto", "sutopatikuna", "taki", "te", "teje", "to", "tuli", "umesu", "unu", "usawi", "wa", "waleja", "wasoweli"]
+	let wile = ""
+	let solutions
+	let allowed
+	let rows = 6
+	let cols = document.getElementById("suli").value
+	let table
+	let guess = 0
+	let stop = 0
+	let nimisuli
+	let kepeken = document.getElementById("nimi").value
+
+	init()
+
+	const buttons = document.querySelectorAll('.out')
+	buttons.forEach((button) => {
+	  button.addEventListener('click', (e) => {send(event.target.textContent)})
+	})
+
+	function getRndInteger(min, max) {
+	  	return Math.floor(Math.random() * (max - min) ) + min;
+	}
+
+	function init() {
+		allowed = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+		solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+
+		if (kepeken == "ale") {
+			console.log("ni li lon ala lon tenpo ni")
+			solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+		} else if (kepeken == "ku lili") {
+			solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+		} else if (kepeken == "ku suli") {
+			solutions = NIMI_PU.concat(NIMI_KU_SULI)
+		} else if (kepeken == "pu") {
+			solutions = NIMI_PU
+		}
+
+		table = ""
+		wile = ""
+		guess = 0
+		stop = 0
+
+		for (let x=0;x<rows;x++) {
+			let rownow = ""
+			for (let y=0;y<cols;y++) {
+				rownow += `<td class="cell guess-${x} index-${y}"></th>`
+			}
+			rownow = `<tr>${rownow}</tr>`
+			table += rownow
+		}
+
+		table = `<table>${table}</table>`
+		document.getElementById("table").innerHTML = table
+
+		let nimitemp = []
+		for (let nimi of solutions) {
+			if (nimi.length == cols) {
+				nimitemp.push(nimi)
+			}
+		}
+		solutions = nimitemp
+
+		document.getElementById("text").textContent = `nimi ${solutions.length} li suli ${cols}.`
+
+		nimisuli = solutions[getRndInteger(0,solutions.length)]
+
+		let letters = "wetuiopasnmjkl".split("")
+
+		for (let x of letters) {
+			document.getElementsByClassName(`key out ${x}`)[0].style.backgroundColor = ""
+			document.getElementsByClassName(`key out ${x}`)[0].style.color = ""
+		}
+	}
+
+	function send(letter) {
+		if (stop) {
+			init()
+		}
+		if (wile.length !== cols) {
+			document.getElementsByClassName(`guess-${guess} index-${wile.length}`)[0].textContent = letter
+			wile += letter
+		}
+	}
+
+	document.getElementById("weka").onclick = () => {
+		wile = ""
+		for (let item of document.getElementsByClassName(`guess-${guess}`)) {
+			item.textContent = ""
+		}
+	}
+
+	document.getElementById("pana").onclick = () => {
+		if (!stop) {
+			if (wile.length == cols) {
+				if (allowed.includes(wile)) {
+					let wiletemp = wile.split("")
+					let sulitemp = nimisuli.split("")
+
+					for (let item of document.getElementsByClassName(`guess-${guess}`)) {
+						item.style.backgroundColor = "grey"
+						item.style.border = "2px solid grey"
+
+					}
+
+					for (let x=0;x<wiletemp.length;x++) {
+						if (wiletemp[x] == sulitemp[x]) {
+							wiletemp[x] = "!"
+							sulitemp[x] = "."
+							document.getElementsByClassName(`guess-${guess} index-${x}`)[0].style.backgroundColor = "green"
+							document.getElementsByClassName(`guess-${guess} index-${x}`)[0].style.border = "2px solid green"
+						}
+					}
+
+					for (let x=0;x<wiletemp.length;x++) {
+						if (sulitemp.includes(wiletemp[x])) {
+							sulitemp[sulitemp.indexOf(wiletemp[x])] = "."
+							wiletemp[x] = "?"
+							document.getElementsByClassName(`guess-${guess} index-${x}`)[0].style.backgroundColor = "orange"
+							document.getElementsByClassName(`guess-${guess} index-${x}`)[0].style.border = "2px solid orange"
+						}
+					}
+
+					for (let x=0;x<wiletemp.length;x++) {
+						if (!(wiletemp[x] == "!" || wiletemp[x] == "?")) {
+							wiletemp[x] = "."
+						}
+					}
+
+					const colors = {white:" ",grey:".",orange:"?",green:"!"}
+					const colorsinv = {" ":"white",".":"grey","?":"orange","!":"green"}
+					const order = " .?!".split("")
+
+					for (let x=0;x<wiletemp.length;x++) {
+						if (order.indexOf(colors[document.getElementsByClassName(`key out ${wile[x]}`)[0].style.backgroundColor]) < order.indexOf(wiletemp[x])) {
+							document.getElementsByClassName(`key out ${wile[x]}`)[0].style.color = "white"
+							document.getElementsByClassName(`key out ${wile[x]}`)[0].style.backgroundColor = colorsinv[wiletemp[x]]
+						}
+					}
+
+					guess += 1
+
+					if (guess == rows) {
+						document.getElementById("text").textContent = `pakala a! nimi suli li nimi "${nimisuli}".`
+						stop = 1
+					}
+					if (wile == nimisuli) {
+						document.getElementById("text").textContent = "pona a!"
+						stop = 1
+					}
+
+					wile = ""
+				} else {
+					document.getElementById("text").textContent = "pana li nimi ala lon toki pona!"
+				}
+			} else {
+				document.getElementById("text").textContent = "pana li lili ike!"
+			}
+		}
+	}
+
+	document.getElementById("suli").oninput = () => {
+		cols = document.getElementById("suli").value
+		init()
+	}
+
+	document.getElementById("nimi").oninput = () => {
+		kepeken = document.getElementById("nimi").value
+		init()
+	}
+</script>
