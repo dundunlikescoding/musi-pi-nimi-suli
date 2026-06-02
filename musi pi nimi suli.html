@@ -33,7 +33,7 @@
 	    font-weight: 700;
 	}
 	.cell {
-		text-transform: uppercase;
+		text-transform: lowercase;
 		height: 40px;
 		max-width: 40px;
 		width: 100vw;
@@ -72,13 +72,16 @@
 		display: flex;
 	}
 	.out {
-		text-transform: capitalize;
+		text-transform: lowercase;
 	}
 	#text {
 		font-size: 50%;
 	}
 	#options {
 		font-size: 50%;
+	}
+	a {
+		color: lime;
 	}
 </style>
 
@@ -96,13 +99,13 @@
 			<div class="game">
 				<div id="options">
 					<label for="suli">suli li</label>
-					<input type="range" min="1" max="15" value="4" id="suli" name="suli">
+					<input type="range" min="1" max="19" value="4" id="suli" name="suli">
 					<label for="nimi">kulupu nimi li</label>
 					<select name="nimi" id="nimi">
 						<option value="pu">nimi pu</option>
 						<option value="ku suli">nimi ku suli</option>
 						<option value="ku lili">nimi ku lili</option>
-					 	<option value="ale" disabled>nimi ale lon ilo Linku</option>
+					 	<option value="ale">nimi ale lon ilo Linku</option>
 					</select>
 				</div>
 				<div id="table"></div>
@@ -140,6 +143,7 @@
 	const NIMI_PU = ["a", "akesi", "ala", "alasa", "ale", "anpa", "ante", "anu", "awen", "e", "en", "esun", "ijo", "ike", "ilo", "insa", "jaki", "jan", "jelo", "jo", "kala", "kalama", "kama", "kasi", "ken", "kepeken", "kili", "kiwen", "ko", "kon", "kule", "kulupu", "kute", "la", "lape", "laso", "lawa", "len", "lete", "li", "lili", "linja", "lipu", "loje", "lon", "luka", "lukin", "lupa", "ma", "mama", "mani", "meli", "mi", "mije", "moku", "moli", "monsi", "mu", "mun", "musi", "mute", "nanpa", "nasa", "nasin", "nena", "ni", "nimi", "noka", "o", "olin", "ona", "open", "pakala", "pali", "palisa", "pan", "pana", "pi", "pilin", "pimeja", "pini", "pipi", "poka", "poki", "pona", "pu", "sama", "seli", "selo", "seme", "sewi", "sijelo", "sike", "sin", "sina", "sinpin", "sitelen", "sona", "soweli", "suli", "suno", "supa", "suwi", "tan", "taso", "tawa", "telo", "tenpo", "toki", "tomo", "tu", "unpa", "uta", "utala", "walo", "wan", "waso", "wawa", "weka", "wile"]
 	const NIMI_KU_SULI = ["epiku", "jasima", "kijetesantakalu", "kipisi", "kokosila", "kin", "ku", "lanpan", "leko", "meso", "misikeke", "monsuta", "n", "namako", "oko", "soko", "tonsi", "ali"]
 	const NIMI_KU_LILI = ["apeja", "ete", "ewe", "isipin", "kamalawala", "kan", "kapesi", "ke", "kese", "kiki", "kulijo", "kuntu", "likujo", "linluwi", "loka", "majuna", "misa", "mulapisu", "nalanja", "neja", "oke", "pake", "pata", "peto", "po", "polinpin", "pomotolo", "powe", "samu", "san", "soto", "sutopatikuna", "taki", "te", "teje", "to", "tuli", "umesu", "unu", "usawi", "wa", "waleja", "wasoweli"]
+	const NIMI_LINKU = ["aka", "ako", "aku", "alente", "alu", "an", "anta", "antikontitutonelema", "apelo", "api", "apoko", "awase", "eki", "eliki", "enepi", "enko", "epikule", "i", "iki", "ini", "inisa", "inta", "ipi", "iseki", "itomi", "iwa", "ja", "jaku", "jalan", "jami", "jans", "jatu", "je", "jepi", "jipi", "jonke", "josuta", "ju", "jule", "jume", "juna", "jupi", "ka", "kajo", "kalapisituji", "kalijopilale", "kana", "kankuli", "kapa", "kasan", "kelo", "kepa", "kepen", "kewe", "kewi", "ki", "kikulo", "kisa", "kokoliko", "kolin", "kolo", "kolo", "konsi", "konsuno", "konwe", "kosan", "kosikosa", "kulaso", "kulu", "kutopoma", "lajotu", "lan", "lapan", "lenke", "lijokuku", "lipasa", "lisa", "lo", "lokon", "loku", "lonsi", "lu", "masalo", "masenta", "me", "melome", "mijomi", "molusa", "mowi", "musitenpike", "natu", "ne", "nele", "nimisin", "nja", "nu", "nun", "nusun", "nuwa", "ojuta", "okepuma", "oki", "olala", "omekalike", "omekapo", "omen", "oni", "onono", "opasan", "owe", "pa", "pakola", "panka", "papa", "pasila", "patu", "pela", "penpo", "peta", "pika", "pipo", "pipolo", "pokasi", "poni", "positu", "potesu", "pulaso", "puwa", "saja", "salu", "sapelipope", "se", "sikako", "sikomo", "silapa", "sipi", "sipije", "siwala", "slape", "snoweli", "sole", "su", "suke", "sulaso", "sunta", "suwili", "ta", "take", "tankala", "tasun", "teki", "ten", "tenkala", "tokana", "toma", "tona", "towoki", "u", "uka", "waken", "wawajete", "we", "wekama", "wi", "wisa", "wiwi", "wuwojiti"]
 	let wile = ""
 	let solutions
 	let allowed
@@ -163,12 +167,11 @@
 	}
 
 	function init() {
-		allowed = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
-		solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+		allowed = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI).concat(NIMI_LINKU)
+		solutions = NIMI_PU
 
 		if (kepeken == "ale") {
-			console.log("ni li lon ala lon tenpo ni")
-			solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
+			solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI).concat(NIMI_LINKU)
 		} else if (kepeken == "ku lili") {
 			solutions = NIMI_PU.concat(NIMI_KU_SULI).concat(NIMI_KU_LILI)
 		} else if (kepeken == "ku suli") {
@@ -202,7 +205,7 @@
 		}
 		solutions = nimitemp
 
-		document.getElementById("text").textContent = `nimi ${solutions.length} li suli ${cols}.`
+		document.getElementById("text").innerHTML = `nimi ${solutions.length} li suli ${cols}.`
 
 		nimisuli = solutions[getRndInteger(0,solutions.length)]
 
@@ -282,20 +285,20 @@
 					guess += 1
 
 					if (guess == rows) {
-						document.getElementById("text").textContent = `pakala a! nimi suli li nimi "${nimisuli}".`
+						document.getElementById("text").innerHTML = `pakala a! nimi suli li nimi "<a href="https://nimi.li/${nimisuli}">${nimisuli}</a>".`
 						stop = 1
 					}
 					if (wile == nimisuli) {
-						document.getElementById("text").textContent = "pona a!"
+						document.getElementById("text").innerHTML = `pona a! <a href="https://nimi.li/${nimisuli}">o lukin e nimi ni</a>!`
 						stop = 1
 					}
 
 					wile = ""
 				} else {
-					document.getElementById("text").textContent = "pana li nimi ala lon toki pona!"
+					document.getElementById("text").innerHTML = "pana li nimi ala lon toki pona!"
 				}
 			} else {
-				document.getElementById("text").textContent = "pana li lili ike!"
+				document.getElementById("text").innerHTML = "pana li lili ike!"
 			}
 		}
 	}
