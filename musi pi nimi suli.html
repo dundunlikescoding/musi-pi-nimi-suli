@@ -153,6 +153,7 @@
 	let guess = 0
 	let stop = 0
 	let nimisuli
+	let jo
 	let kepeken = document.getElementById("nimi").value
 
 	init()
@@ -215,6 +216,8 @@
 			document.getElementsByClassName(`key out ${x}`)[0].style.backgroundColor = ""
 			document.getElementsByClassName(`key out ${x}`)[0].style.color = ""
 		}
+
+		jo = "musi pi nimi suli (lon tenpo ale)"
 	}
 
 	function send(letter) {
@@ -227,6 +230,17 @@
 		}
 	}
 
+	function copyToClipboard(text) {
+  		navigator.clipboard.writeText(text)
+    	.then(() => {
+      		console.log('Text successfully copied to clipboard');
+    	})
+    	.catch(err => {
+      		console.error('Failed to copy text: ', err);
+    	});
+ 	}
+
+
 	document.getElementById("weka").onclick = () => {
 		wile = ""
 		for (let item of document.getElementsByClassName(`guess-${guess}`)) {
@@ -238,6 +252,7 @@
 		if (!stop) {
 			if (wile.length == cols) {
 				if (allowed.includes(wile)) {
+					jo += "\n"
 					let wiletemp = wile.split("")
 					let sulitemp = nimisuli.split("")
 
@@ -273,14 +288,18 @@
 
 					const colors = {white:" ",grey:".",orange:"?",green:"!"}
 					const colorsinv = {" ":"white",".":"grey","?":"orange","!":"green"}
+					const colorsj = {white:"⬜",grey:"⬛",orange:"🟨",green:"🟩"}
 					const order = " .?!".split("")
 
 					for (let x=0;x<wiletemp.length;x++) {
 						if (order.indexOf(colors[document.getElementsByClassName(`key out ${wile[x]}`)[0].style.backgroundColor]) < order.indexOf(wiletemp[x])) {
 							document.getElementsByClassName(`key out ${wile[x]}`)[0].style.color = "white"
 							document.getElementsByClassName(`key out ${wile[x]}`)[0].style.backgroundColor = colorsinv[wiletemp[x]]
+							jo += colorsj[colorsinv[wiletemp[x]]]
 						}
 					}
+
+					jo += `||${wile}||`
 
 					guess += 1
 
@@ -289,7 +308,7 @@
 						stop = 1
 					}
 					if (wile == nimisuli) {
-						document.getElementById("text").innerHTML = `pona a! <a href="https://nimi.li/${nimisuli}">o lukin e nimi ni</a>!`
+						document.getElementById("text").innerHTML = `pona a! <a href="https://nimi.li/${nimisuli}">o lukin e nimi ni</a>! <button id="jo">o kama jo e ni!</button>`
 						stop = 1
 					}
 
@@ -311,5 +330,10 @@
 	document.getElementById("nimi").oninput = () => {
 		kepeken = document.getElementById("nimi").value
 		init()
+	}
+
+	document.getElementById("jo").oninput = () => {
+		jo += "\n"
+		copyToClipboard(jo)
 	}
 </script>
