@@ -110,6 +110,7 @@
 				</div>
 				<div id="table"></div>
 				<div id="text">o sitelen!</div>
+				<div id="button"><button id="jo">o kama jo e ni!</button></div>
 				<div id="keyboard">
 					<div class="keyboard-row">
 						<button class="key out w">w</button>
@@ -218,6 +219,7 @@
 		}
 
 		jo = "musi pi nimi suli (lon tenpo ale)"
+		document.getElementById("jo").style.display = "none"
 	}
 
 	function send(letter) {
@@ -305,10 +307,12 @@
 
 					if (guess == rows) {
 						document.getElementById("text").innerHTML = `pakala a! nimi suli li nimi "<a href="https://nimi.li/${nimisuli}">${nimisuli}</a>".`
+						document.getElementById("jo").style.display = "inline-block"
 						stop = 1
 					}
 					if (wile == nimisuli) {
-						document.getElementById("text").innerHTML = `pona a! <a href="https://nimi.li/${nimisuli}">o lukin e nimi ni</a>! <button id="jo">o kama jo e ni!</button>`
+						document.getElementById("text").innerHTML = `pona a! <a href="https://nimi.li/${nimisuli}">o lukin e nimi ni</a>!`
+						document.getElementById("jo").style.display = "inline-block"
 						stop = 1
 					}
 
